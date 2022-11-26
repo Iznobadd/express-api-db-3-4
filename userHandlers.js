@@ -45,14 +45,28 @@ const modifyUser = (req, res) => {
             res.sendStatus(204);
         }
     }).catch((err) => {
-      console.error(err);
-      res.status(500).send("Internal server error");
+        console.error(err);
+        res.status(500).send("Internal server error");
     })
-  }
+}
 
+const deleteUser = (req, res) => {
+    const id = parseInt(req.params.id);
+    db.query("delete from users where id = ?", [id]).then(([result]) => {
+        if(result.affectedRows === 0) {
+            res.status(404).send("User not found");
+        } else {
+            res.sendStatus(204);
+        }
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send("Internal server error");
+    })
+}
 module.exports = {
     getUsers,
     getUserById,
     createUser,
-    modifyUser
+    modifyUser,
+    deleteUser
 };
